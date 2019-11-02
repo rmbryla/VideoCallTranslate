@@ -1,4 +1,4 @@
-package com.example.videocalltranslate
+package com.example.videocalltranslate.Activities
 
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -13,6 +13,7 @@ import android.speech.SpeechRecognizer
 import android.view.MotionEvent
 import android.view.View
 import androidx.core.content.ContextCompat
+import com.example.videocalltranslate.R
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
@@ -56,13 +57,11 @@ class MainActivity : AppCompatActivity() {
         talk_button.setOnTouchListener(object : View.OnTouchListener{
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if(event?.action == MotionEvent.ACTION_DOWN){
-                    edit_text.setText("")
-                    edit_text.hint = "Listening...."
                     speechRecognizer.startListening(mSpeechRecognizerIntent)
                 }
                 else if(event?.action == MotionEvent.ACTION_UP){
                     speechRecognizer.stopListening()
-                    edit_text.hint = "You will se text here"
+
                 }
                 return false
             }

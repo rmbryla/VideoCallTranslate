@@ -2,8 +2,12 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
     <item>
         <shape android:shape="oval" >
-            <solid android:color="@android:color/white"/>
+            <solid android:color="@color/lightGreen"/>
         </shape>
     </item>
-    <item android:drawable="@android:drawable/ic_btn_speak_now"></item>
+    <item>
+        <bitmap android:src="@android:drawable/ic_btn_speak_now"
+            android:tint="@color/navyBlue"/>
+
+    </item>
 </layer-list>
