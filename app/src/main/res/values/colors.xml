@@ -3,4 +3,7 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D81B60</color>
+    <color name="navyBlue">#09376A</color>
+    <color name="turquoise">#06998E</color>
+    <color name="lightGreen">#99FAD7</color>
 </resources>
