@@ -16,6 +16,10 @@ import androidx.core.content.ContextCompat
 import com.example.videocalltranslate.R
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import android.provider.ContactsContract
+import android.util.Log
+import kotlinx.android.synthetic.main.item_contact.view.*
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -68,6 +72,30 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+        getContactList()
+    }
+
+    private fun getContactList() {
+        val cr = contentResolver
+        val cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
+
+        if (cur?.count ?: 0 > 0) {
+            while (cur != null && cur.moveToNext()) {
+                val id = cur.getString(
+                    cur.getColumnIndex(ContactsContract.Contacts._ID)
+                )
+                val name = cur.getString(
+                    cur.getColumnIndex(
+                        ContactsContract.Contacts.DISPLAY_NAME
+                    )
+                )
+
+                val contact = View.inflate(applicationContext, R.layout.item_contact, null)
+                contact.contact_name.text = name
+                contact_list.addView(contact)
+            }
+        }
+        cur?.close()
     }
 
     private fun goToSendText(){
