@@ -21,6 +21,7 @@ class MainActivity : AppCompatActivity() {
 
     val speechRecognizer: SpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
     val mSpeechRecognizerIntent: Intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+    var spokenText: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +50,8 @@ class MainActivity : AppCompatActivity() {
 
             override fun onResults(results: Bundle?) {
                 val arr = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
-                edit_text.setText(arr?.get(0))
+                spokenText = arr?.get(0) ?: ""
+                goToSendText()
             }
 
         })
@@ -61,12 +63,18 @@ class MainActivity : AppCompatActivity() {
                 }
                 else if(event?.action == MotionEvent.ACTION_UP){
                     speechRecognizer.stopListening()
-
                 }
                 return false
             }
         })
 
+    }
+
+    private fun goToSendText(){
+        val intent = Intent(this, SendTextActivity::class.java)
+        intent.putExtra("SpokenText", spokenText)
+        startActivity(intent)
+        finish()
     }
 
     private fun checkPermission(){
