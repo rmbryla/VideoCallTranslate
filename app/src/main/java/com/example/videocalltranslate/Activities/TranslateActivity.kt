@@ -1,4 +1,4 @@
-package com.example.videocalltranslate
+package com.example.videocalltranslate.Activities
 
 import android.os.Bundle
 import android.os.StrictMode
@@ -6,11 +6,10 @@ import android.view.View
 import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
+import com.example.videocalltranslate.R
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.translate.Translate
 import com.google.cloud.translate.TranslateOptions
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import java.io.IOException
 
 
@@ -47,6 +46,10 @@ class TranslateActivity : AppCompatActivity() {
 
     }
 
+
+    /**
+     * copy these two functions to use translate functionality
+     */
     fun translate(targetLang : String) {
 
         //Get input text to be translated:
