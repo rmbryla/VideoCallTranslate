@@ -1,6 +1,5 @@
 package com.example.videocalltranslate.Activities
 
-import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -19,10 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import android.provider.ContactsContract
 import android.util.Log
-import androidx.core.app.ActivityCompat
-import com.twilio.video.*
 import kotlinx.android.synthetic.main.item_contact.view.*
-import java.security.Permission
 
 
 class MainActivity : AppCompatActivity() {
@@ -87,6 +83,19 @@ class MainActivity : AppCompatActivity() {
 
 
         getContactList()
+
+        val settingsButton : Button = findViewById(R.id.settings_button)
+        settingsButton.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                openSettingsDialog()
+            }
+        })
+
+    }
+
+    private fun openSettingsDialog() {
+        val settingsDialog : SettingsDialog = SettingsDialog()
+        settingsDialog.show(supportFragmentManager, "Settings")
     }
 
     private fun getContactList() {
@@ -127,5 +136,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
 }

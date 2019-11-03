@@ -22,14 +22,7 @@ android {
     }
 
     packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/ASL2.0'
+        exclude 'project.properties'
         exclude 'META-INF/INDEX.LIST'
     }
 
@@ -49,7 +42,14 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'com.google.cloud:google-cloud-translate:1.94.0'
+
+    implementation('com.google.cloud:google-cloud-translate:1.12.0') {
+        exclude group: 'org.apache.httpcomponents'
+        exclude group: 'org.json', module: 'json'
+    }
+    annotationProcessor 'com.google.auto.value:auto-value:1.2'
+
+
     implementation 'org.jetbrains.anko:anko-common:0.9'
     implementation 'com.twilio:video-android:5.0.0'
     implementation 'com.google.android.material:material:1.0.0'

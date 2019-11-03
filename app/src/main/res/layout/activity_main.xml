@@ -39,4 +39,15 @@
         app:layout_constraintStart_toStartOf="parent"
         />
 
+    <Button
+        android:id="@+id/settings_button"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_margin="16dp"
+        android:background="@mipmap/settings_icon"
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
