@@ -4,12 +4,13 @@
         android:width="70dp"
         android:height="70dp">
         <shape android:shape="oval" >
-            <solid android:color="@color/red"/>
+            <solid android:color="@color/lightGreen"/>
         </shape>
     </item>
     <item>
         <bitmap android:src="@android:drawable/ic_btn_speak_now"
-            android:tint="@android:color/darker_gray" />
+            android:tint="@color/navyBlue" />
 
     </item>
+
 </layer-list>

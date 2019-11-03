@@ -167,6 +167,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                             phoneNumValue = cursorPhone.getString(cursorPhone.getColumnIndex(
                                 ContactsContract.CommonDataKinds.Phone.NUMBER
                             ))
+                            break
 
                         }
                     }

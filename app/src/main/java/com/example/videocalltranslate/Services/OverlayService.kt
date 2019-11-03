@@ -30,6 +30,7 @@ import com.google.cloud.translate.Translate
 import com.google.cloud.translate.TranslateOptions
 import java.io.IOException
 import java.util.*
+import kotlin.math.abs
 
 class OverlayService : Service(), View.OnClickListener, View.OnTouchListener {
 
@@ -92,7 +93,8 @@ class OverlayService : Service(), View.OnClickListener, View.OnTouchListener {
         windowManager = getSystemService(Context.WINDOW_SERVICE) as WindowManager
 
         overlayButton = ImageButton(this)
-        overlayButton.setImageResource(R.drawable.mic_button)
+        overlayButton.setBackgroundColor(resources.getColor(android.R.color.transparent))
+        overlayButton.setImageResource(R.drawable.overlay)
         overlayButton.setOnClickListener(this)
         overlayButton.setOnTouchListener(this)
 
@@ -135,7 +137,7 @@ class OverlayService : Service(), View.OnClickListener, View.OnTouchListener {
             overlayButton.setImageResource(R.drawable.recording_button)
         } else {
             speechRecognizer.stopListening()
-            overlayButton.setImageResource(R.drawable.mic_button)
+            overlayButton.setImageResource(R.drawable.overlay)
 
         }
 
@@ -177,6 +179,8 @@ class OverlayService : Service(), View.OnClickListener, View.OnTouchListener {
                 initialTouchX = event.rawX
                 initialTouchY = event.rawY
                 moving=true
+
+
             }
             MotionEvent.ACTION_UP -> {
                 moving = false

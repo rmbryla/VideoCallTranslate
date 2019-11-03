@@ -7,13 +7,15 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Send a text"
-        android:textSize="40sp"
+        android:text="Translate To:"
+        android:textSize="20sp"
         android:gravity="center"
+        android:layout_margin="16dp"
         android:fontFamily="sans-serif-medium"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <EditText
         android:id="@+id/spoken_text"
@@ -28,6 +30,7 @@
         android:id="@+id/translated_text"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:shadowColor="@android:color/darker_gray"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="24dp"
@@ -49,8 +52,10 @@
         android:layout_height="wrap_content"
         android:layout_margin="16dp"
 
-        app:layout_constraintTop_toBottomOf="@+id/translated_text"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
