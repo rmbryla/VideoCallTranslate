@@ -108,8 +108,10 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
 
 
-        adapter=ContactListAdapter(StoredData.contacts, applicationContext)
+        adapter=ContactListAdapter(getContactList(), applicationContext)
         contact_list.adapter = adapter
+        adapter.notifyDataSetChanged()
+        search_view.setOnQueryTextListener(this)
         try {
             getContactList()
         } catch (e : Exception) {}
@@ -141,7 +143,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
         settingsDialog.show(supportFragmentManager, "Settings")
     }
 
-    private fun getContactList() {
+    private fun getContactList(): ArrayList<ContactCard> {
         val cr = contentResolver
         val cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
         var phoneNumValue = ""
@@ -179,10 +181,10 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
                 })
                 contact.contact_name.text = name
                 contact.contact_number.text = phoneNumValue
-                contact_list.addView(contact)
             }
         }
         cur?.close()
+        return StoredData.contacts
     }
 
     private fun goToSendText(){
