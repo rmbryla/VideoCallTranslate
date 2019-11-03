@@ -27,7 +27,7 @@ class SettingsActivity : AppCompatActivity() {
         const val PREF_VP8_SIMULCAST = "vp8_simulcast"
         const val PREF_VP8_SIMULCAST_DEFAULT = false
         const val PREF_ENABLE_AUTOMATIC_SUBSCRIPTION = "enable_automatic_subscription"
-        const val PREF_ENABLE_AUTOMATIC_SUBCRIPTION_DEFAULT = true
+        const val PREF_ENABLE_AUTOMATIC_SUBSCRIPTION_DEFAULT = true
 
         val VIDEO_CODEC_NAMES = arrayOf(Vp8Codec.NAME, H264Codec.NAME, Vp9Codec.NAME)
 
@@ -56,9 +56,9 @@ class SettingsActivity : AppCompatActivity() {
         }
     }
 
-    inner class SettingsFragment : PreferenceFragmentCompat(){
+    class SettingsFragment : PreferenceFragmentCompat(){
         private val sharedPreferences by lazy {
-            PreferenceManager.getDefaultSharedPreferences(this@SettingsActivity)
+            PreferenceManager.getDefaultSharedPreferences(context)
         }
 
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -87,7 +87,7 @@ class SettingsActivity : AppCompatActivity() {
         override fun onOptionsItemSelected(item: MenuItem): Boolean {
             return when (item.itemId) {
                 android.R.id.home -> {
-                    startActivity(Intent(this@SettingsActivity, SettingsActivity::class.java))
+                    startActivity(Intent(context, SettingsActivity::class.java))
                     true
                 }
                 else -> super.onOptionsItemSelected(item)

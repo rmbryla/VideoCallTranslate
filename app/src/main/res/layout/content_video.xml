@@ -10,7 +10,7 @@
     tools:showIn="@layout/activity_video">
 
     <com.twilio.video.VideoView
-        android:id="@+id/thumbnailVideoView"
+        android:id="@+id/thumbnail_video_view"
         app:overlaySurface="true"
         app:mirror="true"
         android:visibility="gone"
@@ -20,14 +20,14 @@
         android:layout_gravity="bottom|start"/>
 
     <com.twilio.video.VideoView
-        android:id="@+id/primaryVideoView"
+        android:id="@+id/primary_video_view"
         app:mirror="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>
 
     <ProgressBar
-        android:id="@+id/reconnectingProgressBar"
+        android:id="@+id/reconnecting_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -43,7 +43,7 @@
         android:layout_gravity="top">
 
         <TextView
-            android:id="@+id/videoStatusTextView"
+            android:id="@+id/video_status_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
