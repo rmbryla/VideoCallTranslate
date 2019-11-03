@@ -19,9 +19,13 @@ import java.util.*
 import android.provider.ContactsContract
 import android.util.Log
 import android.widget.Button
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import com.example.videocalltranslate.Dialogs.SettingsDialog
+import com.example.videocalltranslate.Services.OverlayService
 import kotlinx.android.synthetic.main.item_contact.view.*
+import java.lang.Exception
+import java.util.jar.Manifest
 
 
 class MainActivity : AppCompatActivity() {
@@ -29,6 +33,8 @@ class MainActivity : AppCompatActivity() {
     val speechRecognizer: SpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
     val mSpeechRecognizerIntent: Intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
     var spokenText: String = ""
+
+    lateinit var startOverlayButton : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +69,28 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+
+        var canDraw = true
+        var intent : Intent? = null
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION)
+            canDraw = Settings.canDrawOverlays(applicationContext)
+            if (!canDraw && intent != null) {
+                startActivity(intent)
+            }
+        }
+
+
+        settings_button.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                val service = Intent(applicationContext, OverlayService::class.java)
+                startService(service)
+            }
+        })
+
+
+
         talk_button.setOnTouchListener(object : View.OnTouchListener{
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if(event?.action == MotionEvent.ACTION_DOWN){
@@ -75,14 +103,15 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        getContactList()
-
-        val settingsButton : Button = findViewById(R.id.settings_button)
-        settingsButton.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(v: View?) {
-                openSettingsDialog()
-            }
-        })
+        try {
+            getContactList()
+        } catch (e : Exception) {}
+//        val settingsButton : Button = findViewById(R.id.settings_button)
+//        settingsButton.setOnClickListener(object : View.OnClickListener{
+//            override fun onClick(v: View?) {
+//                openSettingsDialog()
+//            }
+//        })
 
     }
 
@@ -124,9 +153,9 @@ class MainActivity : AppCompatActivity() {
     private fun checkPermission(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()))
-                startActivity(intent)
-                finish()
+                val permissions = arrayOf(android.Manifest.permission.RECORD_AUDIO,
+                                            android.Manifest.permission.READ_CONTACTS)
+                ActivityCompat.requestPermissions(this, permissions, 1)
             }
         }
     }
