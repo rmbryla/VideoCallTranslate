@@ -68,6 +68,7 @@ public class VoiceActivity extends AppCompatActivity {
      * For example : https://myurl.io/accessToken.php
      */
     private static final String TWILIO_ACCESS_TOKEN_SERVER_URL = "http://0e43dfce.ngrok.io/accessToken";
+    private static final String TWILIO_MAKE_CALL_URL = "http://0e43dfce.ngrok.io/makeCall";
 
     private static final int MIC_PERMISSION_REQUEST_CODE = 1;
     private static final int SNACKBAR_DURATION = 4000;
@@ -635,6 +636,23 @@ public class VoiceActivity extends AppCompatActivity {
         return alertDialogBuilder.create();
 
     }
+
+//    private void makeCall(){
+//        Ion.with(this).load(TWILIO_MAKE_CALL_URL).asString().setCallback(new FutureCallback<String>() {
+//            @Override
+//            public void onCompleted(Exception e, String accessToken) {
+//                if (e == null) {
+//                    Log.d(TAG, "Access token: " + accessToken);
+//                    VoiceActivity.this.accessToken = accessToken;
+//                    registerForCallInvites();
+//                } else {
+//                    Snackbar.make(coordinatorLayout,
+//                            "Error retrieving access token. Unable to make calls",
+//                            Snackbar.LENGTH_LONG).show();
+//                }
+//            }
+//        });
+//    }
 
     /*
      * Get an access token from your Twilio access token server
