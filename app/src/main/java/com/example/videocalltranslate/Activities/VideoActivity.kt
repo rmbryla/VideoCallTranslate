@@ -37,7 +37,7 @@ class VideoActivity : AppCompatActivity() {
     /*
      * You must provide a Twilio Access Token to connect to the Video service
      */
-    private val TWILIO_ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTS2M0ZWViODUwZjQyOTBhYzlhNDJjM2ZjZmUwOWZmMGJhLTE1NzI3NTIzODUiLCJpc3MiOiJTS2M0ZWViODUwZjQyOTBhYzlhNDJjM2ZjZmUwOWZmMGJhIiwic3ViIjoiQUM5ZTQ3NWYxOWQ3ZGM1MjU1YzIwNzI4NGViNzIyNDEzMSIsImV4cCI6MTU3Mjc1NTk4NSwiZ3JhbnRzIjp7ImlkZW50aXR5IjoiSWRlbnRpdHkyIiwidmlkZW8iOnt9fX0.NpQ5Otm5Lm7oXASyuveWhPTkjV5WR_Obdi7rtwfFH_M"
+    private val TWILIO_ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTS2M0ZWViODUwZjQyOTBhYzlhNDJjM2ZjZmUwOWZmMGJhLTE1NzI3NjA1NTMiLCJpc3MiOiJTS2M0ZWViODUwZjQyOTBhYzlhNDJjM2ZjZmUwOWZmMGJhIiwic3ViIjoiQUM5ZTQ3NWYxOWQ3ZGM1MjU1YzIwNzI4NGViNzIyNDEzMSIsImV4cCI6MTU3Mjc2NDE1MywiZ3JhbnRzIjp7ImlkZW50aXR5IjoiaWQzIiwidmlkZW8iOnt9fX0.8MqYztiC6baatOVmSF3FVebDGATd5Pnk0AWhVdctbZk"
     //private val ACCESS_TOKEN_SERVER =
 
     /*
@@ -90,8 +90,9 @@ class VideoActivity : AppCompatActivity() {
 
     private val enableAutomaticSubscription: Boolean
         get() {
-            return sharedPreferences.getBoolean(SettingsActivity.PREF_ENABLE_AUTOMATIC_SUBSCRIPTION, SettingsActivity.PREF_ENABLE_AUTOMATIC_SUBCRIPTION_DEFAULT)
+            return true
         }
+
 
     /*
      * Encoding parameters represent the sender side bandwidth constraints.
@@ -123,6 +124,7 @@ class VideoActivity : AppCompatActivity() {
 
             // Only one participant is supported
             room.remoteParticipants?.firstOrNull()?.let { addRemoteParticipant(it) }
+
         }
 
         override fun onReconnected(room: Room) {
@@ -168,6 +170,7 @@ class VideoActivity : AppCompatActivity() {
              * Indicates when media shared to a Room is being recorded. Note that
              * recording is only available in our Group Rooms developer preview.
              */
+
             Log.d(TAG, "onRecordingStarted")
         }
 
@@ -650,13 +653,9 @@ class VideoActivity : AppCompatActivity() {
      */
     private fun initializeUI() {
         connectActionFab.background = (ContextCompat.getDrawable(this, R.drawable.ic_video_call_white_24dp))
-        connectActionFab.showContextMenu()
         connectActionFab.setOnClickListener(connectActionClickListener())
-        switchCameraActionFab.showContextMenu()
         switchCameraActionFab.setOnClickListener(switchCameraClickListener())
-        localVideoActionFab.showContextMenu()
         localVideoActionFab.setOnClickListener(localVideoClickListener())
-        muteActionFab.showContextMenu()
         muteActionFab.setOnClickListener(muteClickListener())
     }
 
@@ -666,7 +665,6 @@ class VideoActivity : AppCompatActivity() {
     private fun setDisconnectAction() {
         connectActionFab.background = (ContextCompat.getDrawable(this,
             R.drawable.ic_call_end_white_24px))
-        connectActionFab.showContextMenu()
         connectActionFab.setOnClickListener(disconnectClickListener())
     }
 
@@ -824,10 +822,8 @@ class VideoActivity : AppCompatActivity() {
                 val icon: Int
                 if (enable) {
                     icon = R.drawable.ic_videocam_white_24dp
-                    switchCameraActionFab.showContextMenu()
                 } else {
                     icon = R.drawable.ic_videocam_off_black_24dp
-                    switchCameraActionFab.visibility = View.GONE
                 }
                 localVideoActionFab.background =(
                     ContextCompat.getDrawable(this@VideoActivity, icon))

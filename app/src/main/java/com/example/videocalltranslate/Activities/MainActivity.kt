@@ -1,5 +1,6 @@
 package com.example.videocalltranslate.Activities
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -18,6 +19,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import android.provider.ContactsContract
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import com.example.videocalltranslate.Dialogs.SettingsDialog
 import kotlinx.android.synthetic.main.item_contact.view.*
 
 
@@ -80,16 +83,15 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-
-
-        getContactList()
-
-        val settingsButton : Button = findViewById(R.id.settings_button)
-        settingsButton.setOnClickListener(object : View.OnClickListener{
+        settings_button.setOnClickListener(object : View.OnClickListener{
             override fun onClick(v: View?) {
-                openSettingsDialog()
+                val intent = Intent(this@MainActivity, SettingsActivity::class.java)
+                startActivity(intent)
+                finish()
             }
         })
+
+
 
     }
 
@@ -98,28 +100,6 @@ class MainActivity : AppCompatActivity() {
         settingsDialog.show(supportFragmentManager, "Settings")
     }
 
-    private fun getContactList() {
-        val cr = contentResolver
-        val cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
-
-        if (cur?.count ?: 0 > 0) {
-            while (cur != null && cur.moveToNext()) {
-                val id = cur.getString(
-                    cur.getColumnIndex(ContactsContract.Contacts._ID)
-                )
-                val name = cur.getString(
-                    cur.getColumnIndex(
-                        ContactsContract.Contacts.DISPLAY_NAME
-                    )
-                )
-
-                val contact = View.inflate(applicationContext, R.layout.item_contact, null)
-                contact.contact_name.text = name
-                contact_list.addView(contact)
-            }
-        }
-        cur?.close()
-    }
 
     private fun goToSendText(){
         val intent = Intent(this, SendTextActivity::class.java)
@@ -136,4 +116,5 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
 }
