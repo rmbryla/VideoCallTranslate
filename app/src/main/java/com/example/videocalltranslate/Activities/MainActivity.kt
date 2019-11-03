@@ -18,6 +18,9 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import android.provider.ContactsContract
 import android.util.Log
+import android.widget.Button
+import androidx.fragment.app.DialogFragment
+import com.example.videocalltranslate.Dialogs.SettingsDialog
 import kotlinx.android.synthetic.main.item_contact.view.*
 
 
@@ -73,6 +76,19 @@ class MainActivity : AppCompatActivity() {
         })
 
         getContactList()
+
+        val settingsButton : Button = findViewById(R.id.settings_button)
+        settingsButton.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                openSettingsDialog()
+            }
+        })
+
+    }
+
+    private fun openSettingsDialog() {
+        val settingsDialog : SettingsDialog = SettingsDialog()
+        settingsDialog.show(supportFragmentManager, "Settings")
     }
 
     private fun getContactList() {

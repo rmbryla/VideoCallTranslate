@@ -62,7 +62,7 @@ class SendTextActivity: AppCompatActivity(){
                 position: Int,
                 id: Long
             ) {
-                var target : String = languageMap.get(languageSpinner.selectedItem.toString()) ?: "en"
+                var target : String = languageMap[languageSpinner.selectedItem.toString()] ?: "en"
                 translate(target)
             }
         }
