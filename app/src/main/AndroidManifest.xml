@@ -22,6 +22,9 @@
 
         <activity android:name=".Activities.SendTextActivity"/>
 
+        <activity android:name=".Activities.VideoActivity"/>
+        <activity android:name=".Activities.SettingsActivity"/>
+
     </application>
 
 </manifest>

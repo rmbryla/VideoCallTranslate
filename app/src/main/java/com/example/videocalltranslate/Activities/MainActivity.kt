@@ -1,5 +1,6 @@
 package com.example.videocalltranslate.Activities
 
+import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -18,7 +19,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import android.provider.ContactsContract
 import android.util.Log
+import androidx.core.app.ActivityCompat
+import com.twilio.video.*
 import kotlinx.android.synthetic.main.item_contact.view.*
+import java.security.Permission
 
 
 class MainActivity : AppCompatActivity() {
@@ -60,6 +64,14 @@ class MainActivity : AppCompatActivity() {
 
         })
 
+        make_a_call.setOnClickListener(object: View.OnClickListener{
+            override fun onClick(v: View?) {
+                val intent = Intent(this@MainActivity, VideoActivity::class.java)
+                startActivity(intent)
+                finish()
+            }
+        })
+
         talk_button.setOnTouchListener(object : View.OnTouchListener{
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if(event?.action == MotionEvent.ACTION_DOWN){
@@ -71,6 +83,8 @@ class MainActivity : AppCompatActivity() {
                 return false
             }
         })
+
+
 
         getContactList()
     }
@@ -108,10 +122,10 @@ class MainActivity : AppCompatActivity() {
     private fun checkPermission(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS, Uri.parse("package:" + getPackageName()))
-                startActivity(intent)
-                finish()
+                val permissions = arrayOf(Manifest.permission.RECORD_AUDIO)
+                ActivityCompat.requestPermissions(this, permissions, 1)
             }
         }
     }
+
 }
