@@ -4,11 +4,13 @@ apply plugin: 'kotlin-android'
 
 apply plugin: 'kotlin-android-extensions'
 
+apply plugin: 'com.google.gms.google-services'
+
 android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.videocalltranslate"
-        minSdkVersion 22
+        minSdkVersion 26
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -43,11 +45,11 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
-    implementation('com.google.cloud:google-cloud-translate:1.12.0') {
+    implementation('com.google.cloud:google-cloud-translate:1.94.0') {
         exclude group: 'org.apache.httpcomponents'
         exclude group: 'org.json', module: 'json'
     }
-    annotationProcessor 'com.google.auto.value:auto-value:1.2'
+    annotationProcessor 'com.google.auto.value:auto-value:1.7'
 
 
     implementation 'org.jetbrains.anko:anko-common:0.9'
@@ -55,7 +57,7 @@ dependencies {
     implementation 'com.android.support:support-media-compat:28.0.0'
     implementation 'com.android.support:design:28.0.0'
     implementation 'com.google.firebase:firebase-messaging:17.6.0'
-    implementation 'com.koushikdutta.ion:ion:2.1.8'
+    implementation 'com.koushikdutta.ion:ion:3.0.8'
 
 }
 

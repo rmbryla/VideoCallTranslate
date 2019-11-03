@@ -9,7 +9,6 @@
         app:showAsAction="ifRoom"/>
 
     <item
-        android:id="@+id/menu_settings"
         android:enabled="true"
         android:title="@string/settings"
         android:visible="true"

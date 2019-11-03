@@ -21,7 +21,6 @@ import android.provider.ContactsContract
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import com.example.videocalltranslate.Dialogs.SettingsDialog
-import kotlinx.android.synthetic.main.item_contact.view.*
 
 
 class MainActivity : AppCompatActivity() {

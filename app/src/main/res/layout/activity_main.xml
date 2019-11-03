@@ -11,7 +11,6 @@
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent">
     <LinearLayout
-        android:id="@+id/contact_list"
         android:orientation="vertical"
         android:layout_margin="16dp"
         android:layout_width="match_parent"
@@ -40,7 +39,6 @@
         />
 
     <Button
-        android:id="@+id/settings_button"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_margin="16dp"

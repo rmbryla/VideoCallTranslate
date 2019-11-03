@@ -13,7 +13,6 @@
         android:id="@+id/contact"/>
 
     <TextView
-        android:id="@+id/text_view_id"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         android:layout_marginRight="@dimen/activity_horizontal_margin"

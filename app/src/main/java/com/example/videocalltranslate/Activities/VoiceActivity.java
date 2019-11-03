@@ -24,11 +24,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Chronometer;
 import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
@@ -38,6 +40,7 @@ import com.example.videocalltranslate.R;
 import com.example.videocalltranslate.SoundPoolManager;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.koushikdutta.async.future.FutureCallback;
 import com.koushikdutta.ion.Ion;
@@ -64,7 +67,7 @@ public class VoiceActivity extends AppCompatActivity {
      *
      * For example : https://myurl.io/accessToken.php
      */
-    private static final String TWILIO_ACCESS_TOKEN_SERVER_URL = "http://35b3a9b1.ngrok.io/accessToken";
+    private static final String TWILIO_ACCESS_TOKEN_SERVER_URL = "http://0e43dfce.ngrok.io/accessToken";
 
     private static final int MIC_PERMISSION_REQUEST_CODE = 1;
     private static final int SNACKBAR_DURATION = 4000;
@@ -79,11 +82,11 @@ public class VoiceActivity extends AppCompatActivity {
     // Empty HashMap, never populated for the Quickstart
     HashMap<String, String> params = new HashMap<>();
 
-    private CoordinatorLayout coordinatorLayout;
-    private FloatingActionButton callActionFab;
-    private FloatingActionButton hangupActionFab;
-    private FloatingActionButton holdActionFab;
-    private FloatingActionButton muteActionFab;
+    private ConstraintLayout coordinatorLayout;
+    private Button callActionFab;
+    private Button hangupActionFab;
+    private Button holdActionFab;
+    private Button muteActionFab;
     private Chronometer chronometer;
     private SoundPoolManager soundPoolManager;
 
@@ -256,10 +259,6 @@ public class VoiceActivity extends AppCompatActivity {
      * The UI state when there is an active call
      */
     private void setCallUI() {
-        callActionFab.hide();
-        hangupActionFab.show();
-        holdActionFab.show();
-        muteActionFab.show();
         chronometer.setVisibility(View.VISIBLE);
         chronometer.setBase(SystemClock.elapsedRealtime());
         chronometer.start();
@@ -269,13 +268,10 @@ public class VoiceActivity extends AppCompatActivity {
      * Reset UI elements
      */
     private void resetUI() {
-        callActionFab.show();
-        muteActionFab.setImageDrawable(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_mic_white_24dp));
-        holdActionFab.hide();
+        muteActionFab.setBackground(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_mic_white_24dp));
+
         holdActionFab.setBackgroundTintList(ColorStateList
                 .valueOf(ContextCompat.getColor(this, R.color.colorAccent)));
-        muteActionFab.hide();
-        hangupActionFab.hide();
         chronometer.setVisibility(View.INVISIBLE);
         chronometer.stop();
     }
@@ -512,9 +508,9 @@ public class VoiceActivity extends AppCompatActivity {
             boolean mute = !activeCall.isMuted();
             activeCall.mute(mute);
             if (mute) {
-                muteActionFab.setImageDrawable(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_mic_white_off_24dp));
+                muteActionFab.setBackground(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_mic_white_off_24dp));
             } else {
-                muteActionFab.setImageDrawable(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_mic_white_24dp));
+                muteActionFab.setBackground(ContextCompat.getDrawable(VoiceActivity.this, R.drawable.ic_mic_white_24dp));
             }
         }
     }
