@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         make_a_call.setOnClickListener(object: View.OnClickListener{
             override fun onClick(v: View?) {
-                val intent = Intent(this@MainActivity, VideoActivity::class.java)
+                val intent = Intent(this@MainActivity, VoiceActivity::class.java)
                 startActivity(intent)
                 finish()
             }
@@ -80,14 +80,6 @@ class MainActivity : AppCompatActivity() {
                     speechRecognizer.stopListening()
                 }
                 return false
-            }
-        })
-
-        settings_button.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(v: View?) {
-                val intent = Intent(this@MainActivity, SettingsActivity::class.java)
-                startActivity(intent)
-                finish()
             }
         })
 
