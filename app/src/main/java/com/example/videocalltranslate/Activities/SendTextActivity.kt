@@ -68,7 +68,11 @@ class SendTextActivity: AppCompatActivity(){
             }
         }
 
-
+        close_btn.setOnClickListener(object: View.OnClickListener{
+            override fun onClick(v: View?) {
+                onBackPressed()
+            }
+        })
 
     }
 

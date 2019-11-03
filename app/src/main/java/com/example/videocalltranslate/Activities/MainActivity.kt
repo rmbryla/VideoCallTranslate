@@ -31,6 +31,7 @@ import com.example.videocalltranslate.Utils.ContactCard
 import com.example.videocalltranslate.Utils.StoredData
 import kotlinx.android.synthetic.main.item_contact.view.*
 import java.lang.Exception
+import java.security.Permission
 import java.util.jar.Manifest
 import kotlin.collections.ArrayList
 
@@ -197,11 +198,19 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     private fun checkPermission(){
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
-                val permissions = arrayOf(android.Manifest.permission.RECORD_AUDIO,
-                                            android.Manifest.permission.READ_CONTACTS,
-                                            android.Manifest.permission.SEND_SMS)
-                ActivityCompat.requestPermissions(this, permissions, 1)
+            val permissions = arrayOf(android.Manifest.permission.RECORD_AUDIO,
+                android.Manifest.permission.READ_CONTACTS,
+                android.Manifest.permission.SEND_SMS)
+            val permissionsToRequest = ArrayList<String>()
+            for(permission in permissions) {
+                if (ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
+                    permissionsToRequest.add(permission)
+                }
+            }
+            if(permissionsToRequest.isNotEmpty()) {
+                val sender = arrayOfNulls<String>(permissionsToRequest.size)
+                permissionsToRequest.toArray(sender)
+                ActivityCompat.requestPermissions(this, sender, 1)
             }
         }
     }
