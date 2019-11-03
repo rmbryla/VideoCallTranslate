@@ -229,6 +229,13 @@ class ContactListAdapter(val items: ArrayList<ContactCard>, val context : Contex
         holder.name.text=item.name
         holder.number.text=item.number
 
+        view.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(v: View?) {
+                StoredData.phoneNumber=item.number
+                Toast.makeText(context, item.number, Toast.LENGTH_LONG).show()
+            }
+        })
+
         return view
     }
 
