@@ -1,5 +1,6 @@
 package com.example.videocalltranslate.Activities
 
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -18,29 +19,41 @@ import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 import android.provider.ContactsContract
 import android.util.Log
-import android.widget.Button
+import android.view.LayoutInflater
+import android.view.ViewGroup
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import com.example.videocalltranslate.Dialogs.SettingsDialog
 import com.example.videocalltranslate.Services.OverlayService
+import com.example.videocalltranslate.Utils.Callback
+import com.example.videocalltranslate.Utils.ContactCard
+import com.example.videocalltranslate.Utils.StoredData
 import kotlinx.android.synthetic.main.item_contact.view.*
 import java.lang.Exception
 import java.util.jar.Manifest
+import kotlin.collections.ArrayList
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
     val speechRecognizer: SpeechRecognizer = SpeechRecognizer.createSpeechRecognizer(this)
     val mSpeechRecognizerIntent: Intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
     var spokenText: String = ""
 
-    lateinit var startOverlayButton : Button
+    var overlayActive = false
+
+    lateinit var adapter:ContactListAdapter
+    lateinit var contactSearch: SearchView
+    lateinit var contactList: ListView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         checkPermission()
+
+
 
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
         mSpeechRecognizerIntent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault())
@@ -81,16 +94,6 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-
-        settings_button.setOnClickListener(object : View.OnClickListener{
-            override fun onClick(v: View?) {
-                val service = Intent(applicationContext, OverlayService::class.java)
-                startService(service)
-            }
-        })
-
-
-
         talk_button.setOnTouchListener(object : View.OnTouchListener{
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 if(event?.action == MotionEvent.ACTION_DOWN){
@@ -103,26 +106,44 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
+
+
+        adapter=ContactListAdapter(StoredData.contacts, applicationContext)
         try {
             getContactList()
         } catch (e : Exception) {}
-//        val settingsButton : Button = findViewById(R.id.settings_button)
-//        settingsButton.setOnClickListener(object : View.OnClickListener{
-//            override fun onClick(v: View?) {
-//                openSettingsDialog()
-//            }
-//        })
+
+        settings_button.setOnClickListener(object : View.OnClickListener{
+            override fun onClick(v: View?) {
+                openSettingsDialog()
+            }
+        })
 
     }
 
+    override fun onQueryTextSubmit(query: String?): Boolean {
+        return true
+    }
+
+    override fun onQueryTextChange(newText: String?): Boolean {
+        adapter.filter(newText ?: "")
+        return false
+    }
+
     private fun openSettingsDialog() {
-        val settingsDialog : SettingsDialog = SettingsDialog()
+        val settingsDialog : SettingsDialog = SettingsDialog(object : Callback{
+            override fun onDone() {
+                val service = Intent(this@MainActivity, OverlayService::class.java)
+                startService(service)
+            }
+        })
         settingsDialog.show(supportFragmentManager, "Settings")
     }
 
     private fun getContactList() {
         val cr = contentResolver
         val cur = cr.query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
+        var phoneNumValue = ""
 
         if (cur?.count ?: 0 > 0) {
             while (cur != null && cur.moveToNext()) {
@@ -134,9 +155,29 @@ class MainActivity : AppCompatActivity() {
                         ContactsContract.Contacts.DISPLAY_NAME
                     )
                 )
+                val number = cur.getString(cur.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER)).toInt()
+                if (number > 0) {
+                    val cursorPhone = cr.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + "=?", arrayOf(id), null)
+                    if (cursorPhone.count > 0) {
+                        while(cursorPhone.moveToNext()) {
+                            phoneNumValue = cursorPhone.getString(cursorPhone.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER
+                            ))
 
+                        }
+                    }
+                }
+                StoredData.addContact(name, phoneNumValue)
                 val contact = View.inflate(applicationContext, R.layout.item_contact, null)
+                contact.setOnClickListener(object : View.OnClickListener {
+                    override fun onClick(v: View?) {
+                        StoredData.phoneNumber=phoneNumValue
+                        Toast.makeText(this@MainActivity, phoneNumValue, Toast.LENGTH_LONG).show()
+                    }
+                })
                 contact.contact_name.text = name
+                contact.contact_number.text = phoneNumValue
                 contact_list.addView(contact)
             }
         }
@@ -154,9 +195,73 @@ class MainActivity : AppCompatActivity() {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
             if(ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED){
                 val permissions = arrayOf(android.Manifest.permission.RECORD_AUDIO,
-                                            android.Manifest.permission.READ_CONTACTS)
+                                            android.Manifest.permission.READ_CONTACTS,
+                                            android.Manifest.permission.SEND_SMS)
                 ActivityCompat.requestPermissions(this, permissions, 1)
             }
         }
+    }
+}
+
+class ContactListAdapter(val items: ArrayList<ContactCard>, val context : Context): BaseAdapter() {
+    val itemsDisplaying = ArrayList<ContactCard>()
+
+    init {
+        itemsDisplaying.addAll(items)
+    }
+
+    override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
+        val holder:ContactCardViewHolder
+        val view:View
+
+        if (convertView == null) {
+            view = LayoutInflater.from(context).inflate(R.layout.item_contact, null)
+            holder = ContactCardViewHolder(view)
+            view.setTag(holder)
+        } else {
+            view = convertView
+            holder = convertView.getTag() as ContactCardViewHolder
+        }
+        val item = itemsDisplaying[position]
+        holder.name.text=item.name
+        holder.number.text=item.number
+
+        return view
+    }
+
+    // Filter Class
+    fun filter(charText : String) {
+        itemsDisplaying.clear()
+        if (charText.length == 0) {
+            itemsDisplaying.addAll(items)
+        } else {
+            for (contact in items) {
+                if (contact.name.toLowerCase().contains(charText.toLowerCase())) {
+                    itemsDisplaying.add(contact)
+                }
+            }
+        }
+        notifyDataSetChanged()
+    }
+
+    override fun getItem(position: Int): Any {
+        return itemsDisplaying[position]
+    }
+
+    override fun getItemId(position: Int): Long {
+        return position.toLong()
+    }
+
+    override fun getCount(): Int {
+        return itemsDisplaying.size
+    }
+}
+
+class ContactCardViewHolder(view : View) {
+    val name : TextView
+    val number : TextView
+    init {
+        name=view.findViewById(R.id.contact_name)
+        number=view.findViewById(R.id.contact_number)
     }
 }

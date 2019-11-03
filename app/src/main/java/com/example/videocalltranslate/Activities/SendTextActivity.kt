@@ -11,6 +11,7 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.doAfterTextChanged
 import com.example.videocalltranslate.R
+import com.example.videocalltranslate.Utils.StoredData
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.translate.Translate
 import com.google.cloud.translate.TranslateOptions
@@ -29,7 +30,7 @@ class SendTextActivity: AppCompatActivity(){
 
         getTranslateService()
 
-        val languageMap = getLangMap()
+        val languageMap = StoredData.getLangMap()
 
         translatedText = translated_text
         originalText = spoken_text
@@ -69,14 +70,6 @@ class SendTextActivity: AppCompatActivity(){
 
 
 
-    }
-
-    fun getLangMap() : HashMap<String, String> {
-        val map = HashMap<String, String>()
-        map.put("Portuguese", "pt")
-        map.put("English", "en")
-        map.put("Spanish", "es")
-        return map
     }
 
     fun getTextToSend(){

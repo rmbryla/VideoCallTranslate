@@ -14,6 +14,21 @@
         app:layout_constraintTop_toTopOf="parent"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"/>
+
+    <TextView
+        android:id="@+id/contact_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="555-555-5555"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textSize="20dp"
+        android:fontFamily="sans-serif-medium"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:paddingRight="20dp"
+        />
+
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"

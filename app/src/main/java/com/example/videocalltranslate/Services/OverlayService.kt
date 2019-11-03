@@ -5,13 +5,16 @@ import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.graphics.PixelFormat
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
 import android.os.StrictMode
+import android.service.carrier.CarrierMessagingService
 import android.speech.RecognitionListener
 import android.speech.RecognizerIntent
 import android.speech.SpeechRecognizer
+import android.telephony.SmsManager
 import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
@@ -21,6 +24,7 @@ import android.widget.Toast
 import androidx.core.content.ContextCompat
 import com.example.videocalltranslate.Activities.SendTextActivity
 import com.example.videocalltranslate.R
+import com.example.videocalltranslate.Utils.StoredData
 import com.google.auth.oauth2.GoogleCredentials
 import com.google.cloud.translate.Translate
 import com.google.cloud.translate.TranslateOptions
@@ -76,7 +80,7 @@ class OverlayService : Service(), View.OnClickListener, View.OnTouchListener {
                 val arr = results?.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION)
                 spokenText = arr?.get(0) ?: ""
 
-                var translated = translate("pt")
+                var translated = translate(StoredData.targetLanguage)
                 if (translated != "") toShare(translated)
                 else Toast.makeText(applicationContext,"Try Again", Toast.LENGTH_LONG)
             }
@@ -142,16 +146,26 @@ class OverlayService : Service(), View.OnClickListener, View.OnTouchListener {
 
     fun toShare(translatedText : String){
 
-        val sendIntent: Intent = Intent().apply {
-            action = Intent.ACTION_SEND
-            putExtra(Intent.EXTRA_TEXT, translatedText)
+        val intent : Intent = Intent(Intent.ACTION_VIEW)
+        intent.putExtra(SmsManager.EXTRA_MMS_DATA, translatedText)
+        intent.setType("vnd.android-dir/mms-sms")
+        intent.putExtra("address", StoredData.phoneNumber);
+        intent.putExtra("sms_body", translatedText)
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 
-            type = "text/plain"
-        }
-        val shareIntent = Intent.createChooser(sendIntent, null)
-        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        //shareIntent.putExtra(Intent.EXTRA_CHOOSER_TARGETS, myChooserTargetArray)
-        startActivity(shareIntent)
+        startActivity(intent)
+
+
+//        val sendIntent: Intent = Intent().apply {
+//            action = Intent.ACTION_SEND
+//            putExtra(Intent.EXTRA_TEXT, translatedText)
+//
+//            type = "text/plain"
+//        }
+//        val shareIntent = Intent.createChooser(sendIntent, null)
+//        shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+//        //shareIntent.putExtra(Intent.EXTRA_CHOOSER_TARGETS, myChooserTargetArray)
+//        startActivity(shareIntent)
     }
 
 
@@ -162,8 +176,8 @@ class OverlayService : Service(), View.OnClickListener, View.OnTouchListener {
             MotionEvent.ACTION_DOWN -> {
                 initialX = params.x
                 initialY = params.y
-                initialTouchX = event!!.rawX
-                initialTouchY = event!!.rawY
+                initialTouchX = event.rawX
+                initialTouchY = event.rawY
                 moving=true
             }
             MotionEvent.ACTION_UP -> {
