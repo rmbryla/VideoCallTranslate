@@ -147,8 +147,6 @@ class OverlayService : Service(), View.OnClickListener, View.OnTouchListener {
     fun toShare(translatedText : String){
 
         val intent : Intent = Intent(Intent.ACTION_VIEW)
-        intent.putExtra(SmsManager.EXTRA_MMS_DATA, translatedText)
-        intent.setType("vnd.android-dir/mms-sms")
         intent.putExtra("address", StoredData.phoneNumber);
         intent.putExtra("sms_body", translatedText)
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
