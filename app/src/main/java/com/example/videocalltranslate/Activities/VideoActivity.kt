@@ -23,7 +23,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.example.videocalltranslate.Presenter.CameraCapturerCompat
+import com.example.videocalltranslate.CameraCapturerCompat
 import com.google.android.material.snackbar.Snackbar
 import com.twilio.video.*
 import kotlinx.android.synthetic.main.activity_video.*
@@ -50,7 +50,7 @@ class VideoActivity : AppCompatActivity() {
     /*
      * You must provide a Twilio Access Token to connect to the Video service
      */
-    val TWILIO_ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTS2M0ZWViODUwZjQyOTBhYzlhNDJjM2ZjZmUwOWZmMGJhLTE1NzI3NzEwODciLCJpc3MiOiJTS2M0ZWViODUwZjQyOTBhYzlhNDJjM2ZjZmUwOWZmMGJhIiwic3ViIjoiQUM5ZTQ3NWYxOWQ3ZGM1MjU1YzIwNzI4NGViNzIyNDEzMSIsImV4cCI6MTU3Mjc3NDY4NywiZ3JhbnRzIjp7ImlkZW50aXR5IjoiaWQyMzQ1Njc4OSIsInZpZGVvIjp7fX19.cEGPxYsQBPAY9PwH_ReWph8BGwwHAHrhcYbuFEh5S8w"
+    val TWILIO_ACCESS_TOKEN = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiIsImN0eSI6InR3aWxpby1mcGE7dj0xIn0.eyJqdGkiOiJTS2M0ZWViODUwZjQyOTBhYzlhNDJjM2ZjZmUwOWZmMGJhLTE1NzI3Nzg3MzAiLCJpc3MiOiJTS2M0ZWViODUwZjQyOTBhYzlhNDJjM2ZjZmUwOWZmMGJhIiwic3ViIjoiQUM5ZTQ3NWYxOWQ3ZGM1MjU1YzIwNzI4NGViNzIyNDEzMSIsImV4cCI6MTU3Mjc4MjMzMCwiZ3JhbnRzIjp7ImlkZW50aXR5IjoiaWQ5OSIsInZpZGVvIjp7fX19.v6hE4OnTraGEv7kaQgmY-wPl-prJthag4tCKZxWKbHI"
     //private static final String ACCESS_TOKEN_SERVER = BuildConfig.TWILIO_ACCESS_TOKEN_SERVER;
 
     /*
@@ -110,7 +110,7 @@ class VideoActivity : AppCompatActivity() {
     private lateinit var localVideoView: VideoRenderer
     private  var disconnectedFromOnDestroy: Boolean = false
     private var isSpeakerPhoneEnabled = true
-    private  var enableAutomaticSubscription: Boolean = false
+    private  var enableAutomaticSubscription: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -397,6 +397,7 @@ class VideoActivity : AppCompatActivity() {
         val connectOptionsBuilder = ConnectOptions.Builder(accessToken)
             .roomName(roomName)
 
+
         /*
          * Add local audio track to connect options to share with participants.
          */
@@ -583,7 +584,9 @@ class VideoActivity : AppCompatActivity() {
     private fun addRemoteParticipantVideo(videoTrack: VideoTrack) {
         moveLocalVideoToThumbnailView();
         primaryVideoView.setMirror(false);
+        localVideoTrack?.removeRenderer(primaryVideoView)
         videoTrack.addRenderer(primaryVideoView);
+
     }
 
     private fun moveLocalVideoToThumbnailView() {
