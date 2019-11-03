@@ -109,6 +109,7 @@ class MainActivity : AppCompatActivity(), SearchView.OnQueryTextListener {
 
 
         adapter=ContactListAdapter(StoredData.contacts, applicationContext)
+        contact_list.adapter = adapter
         try {
             getContactList()
         } catch (e : Exception) {}
